@@ -2,62 +2,47 @@
 
 */
 
-
 document.addEventListener("DOMContentLoaded", function (event) {  //waits for page load
-
-    function buildQueryURL() {
-        //     // queryURL is the url we'll use to query the API
-        var queryURL = "https://api.openweathermap.org/data/2.5/weather?";
-
-        var queryParams = {
-            "APPID": "c04cb915be53a048550a73855778b1d9"
-            , "units": "imperial"
-        };
-
-        // Grab text the user typed into the search input, add to the queryParams object
-        queryParams.q = $("#city-input")
-            .val()
-            .trim();
-
-        // Logging the URL so we have access to it for troubleshooting
-        console.log("---------------\nURL: " + queryURL + "\n---------------");
-        console.log(queryURL + $.param(queryParams));
-        return queryURL + $.param(queryParams);
-    }
-
-    function buildUviUrl(WeatherData) {
-        var queryURLuvi = "http://api.openweathermap.org/data/2.5/uvi?";
-        let lat = WeatherData.coord.lat;
-        let lon = WeatherData.coord.lon;
-        var queryParamsUvi = { "APPID": "c04cb915be53a048550a73855778b1d9", "lat": lat, "lon": lon };
-
-        return queryURLuvi + $.param(queryParamsUvi);
-    }
+    var appId = "c04cb915be53a048550a73855778b1d9"
 
     /**
- * takes API data (JSON/object) and turns it into elements on the page
- * @param {object} UviData - object containing NYT API data
- */
-    function getUVI(WeatherData) {
-        var queryURLuvi = buildUviUrl(WeatherData);
-
-        $.ajax({
-            url: queryURLuvi,
-            method: "GET"
-        }).then(UviInfo);
-    }
+   * takes API data (JSON/object) and turns it into elements on the page
+   * @param {object} WeatherData - object containing current day weather
+   * @param {object} UviData - object containing UV Index info
+   * @param {object} ForecastData - object containing 5-day forecast info info
+   */
 
 
-    function UviInfo(UviData) {
-        console.log(" ------------ UVI Data ----------------- ")
-        console.log(UviData);
-        // return UviData.value;
-    }
+    // function renderViz(WeatherData, UviData) {
+    //     console.log(WeatherData);
+    //     console.log(UviData);
 
-    // Function to empty out the articles
-    function clear() {
-        $("#article-section").empty();
-    }
+    // }
+
+    // function getForecast(WeatherData) {
+    //     var queryURLforecast = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+    //     // var queryURLforecast = "http://api.openweathermap.org/data/2.5/forecast/?";
+
+    //     let lat = WeatherData.coord.lat;
+    //     let lon = WeatherData.coord.lon;
+
+    //     var paramsURLforecast = { "appid": appId, "lat": lat, "lon": lon, "cnt": 5 };
+    //     // var paramsURLforecast = { "q" : "Baltimore", "appid": appId};
+    //     //    console.log(queryURLforecast + $.param(paramsURLforecast));
+
+    //     var queryURLcast = queryURLforecast + $.param(paramsURLforecast);
+    //     console.log(queryURLcast);
+    //     // let urlTest = "http://api.openweathermap.org/data/2.5/forecast?q=Baltimore&appid=c04cb915be53a048550a73855778b1d9";
+    //     // console.log(queryURLcast == urlTest);
+
+    //     $.ajax({
+    //         url: queryURLcast,
+    //         method: "GET",
+    //         dataType: "json"
+    //     }).then(function (ForecastData) {
+    //         console.log(ForecastData);
+    //     });  //call function to build daily forecast
+    // }
 
     // .on("click") function associated with the Search Button
     $("#search-btn").on("click", function (event) {
@@ -67,40 +52,98 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
         event.preventDefault();
         // Empty the search
         clear();
-        // Build the query URL for the ajax request to the NYT API
-        var queryURL = buildQueryURL();
-        // Make the AJAX request to the API - GETs the JSON data at the queryURL.
-        // The data then gets passed as an argument to the updatePage function
+        // $.get("http://api.openweathermap.org/data/2.5/forecast?q=Baltimore&appid=c04cb915be53a048550a73855778b1d9").then((response)=>{
+        //     console.log(response)
+        // });
+
+        //     // queryURL is the url we'll use to query the API
+        var queryURL = "http://api.openweathermap.org/data/2.5/weather?";
+        var queryParams = {
+            "APPID": appId
+            , "units": "imperial"
+        };
+        // Grab text the user typed into the search input, add to the queryParams object
+        queryParams.q = $("#city-input")
+            .val()
+            .trim();
+        // Logging the URL so we have access to it for troubleshooting
+        // console.log("---------------\nURL: " + queryURL + "\n---------------");
+        // console.log(queryURL + $.param(queryParams));
+        var queryURL = queryURL + $.param(queryParams);
+        // // Make the AJAX request to the API - GETs the JSON data at the queryURL.
+        // // The data then gets passed as an argument to the updatePage function
         $.ajax({
             url: queryURL,
             method: "GET"
-        }).then(updatePage);
+        }).then(function (WeatherData) {
+            //build URL for UV call with WeatherData object information
+            var queryURLuvi = "http://api.openweathermap.org/data/2.5/uvi?";
+            let lat = WeatherData.coord.lat;
+            let lon = WeatherData.coord.lon;
+            var queryParamsUvi = { "appid": appId, "lat": lat, "lon": lon };
+
+            var queryURLuvi = queryURLuvi + $.param(queryParamsUvi);
+
+            $.ajax({
+                url: queryURLuvi,
+                method: "GET"
+            }).then(function (UviData) {
+                // renderViz(WeatherData, UviData);
+                var weather = $("<div>");
+                //City name
+                let cityName = $("<div>").text("City: " + WeatherData.name);
+                //Temperature
+                let temp = $("<div>").text("Temperature: " + WeatherData.main.temp + " F");
+                //Humidity
+                let humidity = $("<div>").text("Humidity: " + WeatherData.main.humidity + "%");
+                //Wind speed
+                let wind = $("<div>").text("Wind: " + WeatherData.wind.speed + " mph");
+                //UV index
+                let uvIndex = $("<div>").text("UV index: " + UviData.value);
+
+                weather.append(cityName).append(temp).append(humidity).append(wind).append(uvIndex);
+
+                $("#current-weather").append(weather);
+
+                //Build URL for daily forecast
+                // var queryURLforecast = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+                var queryURLforecast = "http://api.openweathermap.org/data/2.5/forecast/?";
+
+                let lat = WeatherData.coord.lat;
+                let lon = WeatherData.coord.lon;
+
+                var paramsURLforecast = { "appid": appId, "lat": lat, "lon": lon, "cnt": 5 };
+                // var paramsURLforecast = { "q" : "Baltimore", "appid": appId};
+                //    console.log(queryURLforecast + $.param(paramsURLforecast));
+
+                var queryURLcast = queryURLforecast + $.param(paramsURLforecast);
+                console.log(queryURLcast);
+                // let urlTest = "http://api.openweathermap.org/data/2.5/forecast?q=Baltimore&appid=c04cb915be53a048550a73855778b1d9";
+                // console.log(queryURLcast == urlTest);
+
+                $.ajax({
+                    url: queryURLcast,
+                    method: "GET",
+                    dataType: "json"
+                }).then(function (ForecastData) {
+                    console.log(ForecastData);
+                });  //call function to build daily forecast
+
+                // getForecast(WeatherData); //trigger forecast data call
+            }.bind(WeatherData)); //passes WeatherData object info along with UV info to function
+
+        });
     });
+
+
 
     //  .on("click") function associated with the clear button
     $("#clear-all").on("click", clear);
 
-    /**
-     * takes API data (JSON/object) and turns it into elements on the page
-     * @param {object} WeatherData - object containing NYT API data
-     */
-    function updatePage(WeatherData) {
-        console.log(WeatherData);
-        var weather = $("<div>");
-        //City name
-        let cityName = WeatherData.name;
-        //Temperature
-        let temp = WeatherData.main.temp;
-        //Humidity
-        let humidity = WeatherData.main.humidity;
-        //Wind speed
-        let wind = WeatherData.wind.speed;
-        //UV index
-        let uv = getUVI(WeatherData);
-        weather.text("City: " + WeatherData.name + "\n");
-
-
-        $("#current-weather").append(weather);
+    // Function to empty out the cities
+    function clear() {
+        $("#article-section").empty();
     }
+
 
 });
