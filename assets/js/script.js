@@ -43,6 +43,44 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
     //         console.log(ForecastData);
     //     });  //call function to build daily forecast
     // }
+    function renderCities() {
+
+        var cities = JSON.parse(localStorage.getItem("cityList"));
+        if (cities === null) {
+            cities = [];
+        }
+
+        // Looping through the array of cities
+        var cityInput = $("#city-input").val().trim();
+        if (cityInput !== "") {
+            cities.push(cityInput);
+        }
+        $("#city-buttons").empty();
+
+        for (var i = 0; i < cities.length; i++) {
+
+            // Then dynamicaly generating buttons for each city in the array.
+            var a = $("<button>");
+            a.addClass("city-btn");
+            // Adding a data-attribute with a value of the movie at index i
+            a.attr("city-name", cities[i]);
+            // Providing the button's text with a value of the movie at index i
+            a.text(cities[i]);
+            // Adding the button to the HTML
+            $("#city-buttons").append(a);
+        }
+
+        localStorage.setItem("cityList", JSON.stringify(cities));
+
+    }
+
+    renderCities();
+
+    $(document).on("click", ".city-btn", function (event) {
+        event.preventDefault();
+        $("#city-input").empty();
+        $("#city-input").val($(this).attr("city-name"));
+    });
 
     // .on("click") function associated with the Search Button
     $("#search-btn").on("click", function (event) {
@@ -156,17 +194,20 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
 
                     forecastWeek.forEach(renderDay);
 
+                    renderCities();
+
+
                     function renderDay(forecastDay, index) {
                         // debugger;
-                        var tempArr=[];
+                        var tempArr = [];
                         var tempTot = 0;
                         var humidTot = 0;
 
-                            for (var i = 0; i < forecastDay.length; i++) {
+                        for (var i = 0; i < forecastDay.length; i++) {
                             tempArr.push(forecastDay[i].main.temp);
-                                tempTot += forecastDay[i].main.temp;
-                                humidTot += forecastDay[i].main.humidity;
-                            }
+                            tempTot += forecastDay[i].main.temp;
+                            humidTot += forecastDay[i].main.humidity;
+                        }
 
                         var low = rounder((Math.min.apply(Math, tempArr)), 1);
                         var high = rounder((Math.max.apply(Math, tempArr)), 1);
@@ -174,27 +215,30 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                         var humid = rounder(humidTot / forecastDay.length)
                         var date = moment.unix(forecastDay[1].dt).utc().format("dddd, MMM Do");  //pull date from any of the objects
                         var weather = forecastDay[3].weather[0].main;  //grab conditions mid-day
-                            console.log(forecastDay);
+                        console.log(forecastDay);
                         function rounder(value, decimal) {
                             var multiplier = Math.pow(10, decimal || 0);
                             return Math.round(value * multiplier) / multiplier;
                         }
-                        
+
                         var address = "#box-" + (index + 1);
                         var dayCast = $("<div>");
                         let dateDisp = $("<div>").text(date);
                         let weatherDisp = $("<div>").text(weather);
 
-                        let tempDisp = $("<div>").text("Temp: " + temp+"°F");
-                        let humidDisp = $("<div>").text("Humidity: " + humid+"%");
+                        let tempDisp = $("<div>").text("Temp: " + temp + "°F");
+                        let humidDisp = $("<div>").text("Humidity: " + humid + "%");
 
                         let minDisp = $("<div>").text("Low: " + low);
                         let maxDisp = $("<div>").text("High: " + high);
                         dayCast.append(dateDisp).append(weatherDisp).append(tempDisp).append(humidDisp).append(minDisp).append(maxDisp);
                         $(address).empty().append(dayCast);
-                        
+
 
                     }
+
+
+
                 });
                 // //find high and low for each day
                 // var today = moment(today).day();
