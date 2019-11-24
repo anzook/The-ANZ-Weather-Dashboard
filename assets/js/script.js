@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
 
                 weather.append(cityName).append(temp).append(humidity).append(wind).append(uvIndex);
 
-                $("#current-weather").append(weather);
+                $("#current-weather").empty().append(weather);
 
                 //Build URL for daily forecast
                 // var queryURLforecast = "http://api.openweathermap.org/data/2.5/forecast/daily?";
@@ -138,78 +138,119 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                     for (var i = 0; i < forecast.length; i++) {
                         //set time comparison values
                         var day = moment.unix(forecast[i].dt).utc();
-                                today = moment.utc().add((dayCounter+1), 'days');
-                                // console.log(day, today);
-                                // console.log(forecast[i])
+                        today = moment.utc().add((dayCounter + 1), 'days');
+                        // console.log(day, today);
+                        // console.log(forecast[i])
 
-                                if (moment(today).isSame(day, 'day')) {  //if it's the same day, add it to the empty array
-                                    forecastDay.push(forecast[i]);  //add forecast to the array for that day
-                                } else if  (moment(today).isBefore(day, 'day')) { //if it's now the next day, kick over to the next array
-                                    forecastWeek[dayCounter] = forecastDay;  //save new array of forecasts organized by day
-                                    dayCounter++;  //move to next day
-                                    forecastDay = [];  //reset day of forecasts
-                                    forecastDay.push(forecast[i]);  //add forecast to the array for that day for this iteration
-                                } 
+                        if (moment(today).isSame(day, 'day')) {  //if it's the same day, add it to the empty array
+                            forecastDay.push(forecast[i]);  //add forecast to the array for that day
+                        } else if (moment(today).isBefore(day, 'day')) { //if it's now the next day, kick over to the next array
+                            forecastWeek[dayCounter] = forecastDay;  //save new array of forecasts organized by day
+                            dayCounter++;  //move to next day
+                            forecastDay = [];  //reset day of forecasts
+                            forecastDay.push(forecast[i]);  //add forecast to the array for that day for this iteration
+                        }
 
                     }
                     forecastWeek[dayCounter] = forecastDay; //captures remaining values after the loop ends
 
+                    forecastWeek.forEach(renderDay);
+
+                    function renderDay(forecastDay, index) {
+                        // debugger;
+                        var tempArr=[];
+                        var tempTot = 0;
+                        var humidTot = 0;
+
+                            for (var i = 0; i < forecastDay.length; i++) {
+                            tempArr.push(forecastDay[i].main.temp);
+                                tempTot += forecastDay[i].main.temp;
+                                humidTot += forecastDay[i].main.humidity;
+                            }
+
+                        var low = rounder((Math.min.apply(Math, tempArr)), 1);
+                        var high = rounder((Math.max.apply(Math, tempArr)), 1);
+                        var temp = rounder((tempTot / forecastDay.length), 1);
+                        var humid = rounder(humidTot / forecastDay.length)
+                        var date = moment.unix(forecastDay[1].dt).utc().format("dddd, MMM Do");  //pull date from any of the objects
+                        var weather = forecastDay[3].weather[0].main;  //grab conditions mid-day
+                            console.log(forecastDay);
+                        function rounder(value, decimal) {
+                            var multiplier = Math.pow(10, decimal || 0);
+                            return Math.round(value * multiplier) / multiplier;
+                        }
+                        
+                        var address = "#box-" + (index + 1);
+                        var dayCast = $("<div>");
+                        let dateDisp = $("<div>").text(date);
+                        let weatherDisp = $("<div>").text(weather);
+
+                        let tempDisp = $("<div>").text("Temp: " + temp+"°F");
+                        let humidDisp = $("<div>").text("Humidity: " + humid+"%");
+
+                        let minDisp = $("<div>").text("Low: " + low);
+                        let maxDisp = $("<div>").text("High: " + high);
+                        dayCast.append(dateDisp).append(weatherDisp).append(tempDisp).append(humidDisp).append(minDisp).append(maxDisp);
+                        $(address).empty().append(dayCast);
+                        
+
+                    }
                 });
-                    // //find high and low for each day
-                    // var today = moment(today).day();
+                // //find high and low for each day
+                // var today = moment(today).day();
 
-                    // var forecastDays = []; // my array of day objects
-                    // var forDay = {};  //my object for each day
-                    //     box = {
-                    //         _color: color // being _color a property of `box`
-                    //     }
-                    //     forecastDays.push(box);
-                    //     var dayCounter = 0;
-                    //     forDay = {
-                    //         low: 999,
-                    //         high: -999,
-                    //     }
-                    //     for (var i = 0; i < forecast.length; i++) {
-                    //         var day = moment.unix(forecast[i].dt).utc();
-                    //         day = moment(day).day();
-                    //         today = moment().add((dayCounter+1), 'days');
-                    //         forDay = 
-                    //         if (moment(today).isSame(day, 'day')) {
+                // var forecastDays = []; // my array of day objects
+                // var forDay = {};  //my object for each day
+                //     box = {
+                //         _color: color // being _color a property of `box`
+                //     }
+                //     forecastDays.push(box);
+                //     var dayCounter = 0;
+                //     forDay = {
+                //         low: 999,
+                //         high: -999,
+                //     }
+                //     for (var i = 0; i < forecast.length; i++) {
+                //         var day = moment.unix(forecast[i].dt).utc();
+                //         day = moment(day).day();
+                //         today = moment().add((dayCounter+1), 'days');
+                //         forDay = 
+                //         if (moment(today).isSame(day, 'day')) {
 
-                    //         } else if  (moment(today).isBefore(day, 'day')) {
-                    //             forecastDays.push(forDay);
-                    //             dayCounter++;
-                    //             forDay = {
-                    //                 low: 999,
-                    //                 high: -999,
-                    //             }
-                    //         }
-
-
-
-                    //         var low = 999;
-                    //         var high = -999;
-                    //         var temp = 0;
-                    //         var counter = 0;
-                    //         if (moment(today).isSame(day, 'day')) {
-                    //             if (low < forecast[i].main.temp_min) {
-                    //                 low = forecast[i].main.temp_min;
-                    //             }
-                    //             if (high > forecast[i].main.temp_max) {
-                    //                 low = forecast[i].main.temp_max;
-                    //             }
-                    //             temp += forecast[i].main.temp;
-                    //             counter++;
-                    //         }
+                //         } else if  (moment(today).isBefore(day, 'day')) {
+                //             forecastDays.push(forDay);
+                //             dayCounter++;
+                //             forDay = {
+                //                 low: 999,
+                //                 high: -999,
+                //             }
+                //         }
 
 
 
+                //         var low = 999;
+                //         var high = -999;
+                //         var temp = 0;
+                //         var counter = 0;
+                //         if (moment(today).isSame(day, 'day')) {
+                //             if (low < forecast[i].main.temp_min) {
+                //                 low = forecast[i].main.temp_min;
+                //             }
+                //             if (high > forecast[i].main.temp_max) {
+                //                 low = forecast[i].main.temp_max;
+                //             }
+                //             temp += forecast[i].main.temp;
+                //             counter++;
+                //         }
 
-                    // var day = moment.unix(1318781876).utc();  //moment utc unix parse
-                    //call function to build daily forecast
 
-                    // getForecast(WeatherData); //trigger forecast data call
-                
+
+
+                // var day = moment.unix(1318781876).utc();  //moment utc unix parse
+                //call function to build daily forecast
+
+                // getForecast(WeatherData); //trigger forecast data call
+
             }.bind(WeatherData)); //passes WeatherData object info along with UV info to function
 
         });
