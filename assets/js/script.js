@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
         var cities = JSON.parse(localStorage.getItem("cityList"));
         if (cities === null) {
             cities = [];
-        } 
+        }
 
         var cityInput = $("#city-input").val().trim();
 
@@ -79,6 +79,17 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
 
     renderCities();
 
+    //attempt to pull user location  --- never works, feature abandoned for now
+    // if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition( function() {;
+    //     $("#current-weather").empty().text("Latitude: " + position.coords.latitude +
+    //     "<br>Longitude: " + position.coords.longitude);
+    //     });
+    //   } else {
+    //     $("#current-weather").empty().text("Geolocation is not supported. Please search for a location on the left.");
+    //   }
+
+        //use favorites to fill search area
     $(document).on("click", ".city-btn", function (event) {
         event.preventDefault();
         $("#city-input").empty();
@@ -87,17 +98,16 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
 
     // .on("click") function associated with the Search Button
     $("#search-btn").on("click", function (event) {
-        // This line allows us to take advantage of the HTML "submit" property
-        // This way we can hit enter on the keyboard and it registers the search
+
         // (in addition to clicks). Prevents the page from reloading on form submit.
         event.preventDefault();
         // Empty the search
-        clear();
+        // clear();
         // $.get("http://api.openweathermap.org/data/2.5/forecast?q=Baltimore&appid=c04cb915be53a048550a73855778b1d9").then((response)=>{
         //     console.log(response)
         // });
 
-        //     // queryURL is the url we'll use to query the API
+        // queryURL is the url we'll use to query the first API
         var queryURL = "http://api.openweathermap.org/data/2.5/weather?";
         var queryParams = {
             "APPID": appId
@@ -218,8 +228,8 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                         var humid = rounder(humidTot / forecastDay.length)
                         var date = moment.unix(forecastDay[1].dt).utc().format("dddd, MMM Do");  //pull date from any of the objects
                         // description cases: https://openweathermap.org/weather-conditions
-                        var weather = forecastDay[3].weather[0].description;  //grab conditions mid-day
-                        console.log(forecastDay);
+                        var weather = (forecastDay[3].weather[0].description);  //grab conditions mid-day
+                        console.log(icon(weather));
                         function rounder(value, decimal) {
                             var multiplier = Math.pow(10, decimal || 0);
                             return Math.round(value * multiplier) / multiplier;
@@ -228,7 +238,8 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                         var address = "#box-" + (index + 1);
                         var dayCast = $("<div>");
                         let dateDisp = $("<div>").text(date);
-                        let weatherDisp = $("<div>").text(weather);
+                        // let weatherDisp = $("<div>").text(weather);
+                        let weatherDisp = $("<div>").html(icon(weather));
 
                         let tempDisp = $("<div>").text("Temp: " + temp + "°F");
                         let humidDisp = $("<div>").text("Humidity: " + humid + "%");
@@ -238,81 +249,58 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                         dayCast.append(dateDisp).append(weatherDisp).append(tempDisp).append(humidDisp).append(minDisp).append(maxDisp);
                         $(address).empty().append(dayCast);
 
-
                     }
 
-
-
                 });
-                // //find high and low for each day
-                // var today = moment(today).day();
-
-                // var forecastDays = []; // my array of day objects
-                // var forDay = {};  //my object for each day
-                //     box = {
-                //         _color: color // being _color a property of `box`
-                //     }
-                //     forecastDays.push(box);
-                //     var dayCounter = 0;
-                //     forDay = {
-                //         low: 999,
-                //         high: -999,
-                //     }
-                //     for (var i = 0; i < forecast.length; i++) {
-                //         var day = moment.unix(forecast[i].dt).utc();
-                //         day = moment(day).day();
-                //         today = moment().add((dayCounter+1), 'days');
-                //         forDay = 
-                //         if (moment(today).isSame(day, 'day')) {
-
-                //         } else if  (moment(today).isBefore(day, 'day')) {
-                //             forecastDays.push(forDay);
-                //             dayCounter++;
-                //             forDay = {
-                //                 low: 999,
-                //                 high: -999,
-                //             }
-                //         }
-
-
-
-                //         var low = 999;
-                //         var high = -999;
-                //         var temp = 0;
-                //         var counter = 0;
-                //         if (moment(today).isSame(day, 'day')) {
-                //             if (low < forecast[i].main.temp_min) {
-                //                 low = forecast[i].main.temp_min;
-                //             }
-                //             if (high > forecast[i].main.temp_max) {
-                //                 low = forecast[i].main.temp_max;
-                //             }
-                //             temp += forecast[i].main.temp;
-                //             counter++;
-                //         }
-
-
-
-
-                // var day = moment.unix(1318781876).utc();  //moment utc unix parse
-                //call function to build daily forecast
-
-                // getForecast(WeatherData); //trigger forecast data call
 
             }.bind(WeatherData)); //passes WeatherData object info along with UV info to function
 
         });
     });
 
-
-
-    //  .on("click") function associated with the clear button
-    $("#clear-all").on("click", clear);
-
-    // Function to empty out the cities
-    function clear() {
-        $("#article-section").empty();
+    function icon(desc) {
+        let code = "";
+        switch (desc) {
+            case "clear sky":
+                code = "<i class=fas fa-sun aria-hidden='true'></i>";
+                break;
+            case "few clouds":
+                code = "<i class=fas fa-cloud-sun aria-hidden='true'></i>";
+                break;
+            case "scattered clouds":
+                code = "<i class=fas fa-cloud aria-hidden='true'></i>";
+                break;
+            case "shower rain":
+                code = "<i class=fas fa-cloud-rain aria-hidden='true'></i>";
+                break;
+            case "rain":
+                code = "<i class=fas fa-cloud-showers-heavy aria-hidden='true'></i>";
+                break;
+            case "thunderstorm":
+                code = "<i class=fas fa-bolt aria-hidden='true'></i>";
+                break;
+            case "snow":
+                code = "<i class=fas fa-snowflake aria-hidden='true'></i>";
+                break;
+            case "mist":
+                code = "<i class=fas fa-smog aria-hidden='true'></i>"
+                break;
+            case "broken clouds":
+                code = "<i class=fas fa-cloud-sun aria-hidden='true'></i>";
+        }
+        return code;
     }
+
+        //In case a clear button were to be added
+    // //  .on("click") function associated with the clear button
+    // $("#clear-all").on("click", clear);
+
+    // // Function to empty out the cities
+    // function clear() {
+    //     $("#article-section").empty();
+    // }
 
 
 });
+
+//greetings stranger ;)
