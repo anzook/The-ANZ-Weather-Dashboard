@@ -48,14 +48,17 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
         var cities = JSON.parse(localStorage.getItem("cityList"));
         if (cities === null) {
             cities = [];
-        }
+        } 
 
-        // Looping through the array of cities
         var cityInput = $("#city-input").val().trim();
+
         if (cityInput !== "") {
             cities.push(cityInput);
+            cities = [...new Set(cities)]
         }
         $("#city-buttons").empty();
+        console.log(cities);
+        // Looping through the array of cities
 
         for (var i = 0; i < cities.length; i++) {
 
@@ -214,7 +217,8 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                         var temp = rounder((tempTot / forecastDay.length), 1);
                         var humid = rounder(humidTot / forecastDay.length)
                         var date = moment.unix(forecastDay[1].dt).utc().format("dddd, MMM Do");  //pull date from any of the objects
-                        var weather = forecastDay[3].weather[0].main;  //grab conditions mid-day
+                        // description cases: https://openweathermap.org/weather-conditions
+                        var weather = forecastDay[3].weather[0].description;  //grab conditions mid-day
                         console.log(forecastDay);
                         function rounder(value, decimal) {
                             var multiplier = Math.pow(10, decimal || 0);
