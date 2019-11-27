@@ -19,6 +19,9 @@ body {
     font-size: small;
     border-radius: 4px;
     background-color: #f5f5;
+    border-style: solid;
+  border-width: 3px;
+  border-color: black;
   }
 
   .navbar {
