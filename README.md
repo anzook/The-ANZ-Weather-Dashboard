@@ -7,7 +7,7 @@ A simple weather dashboard utilizing APIs
 
 This simple dashboard utiles the Openweather API's available for free. Bootstrap was used as the framework. Time elements were handled by Moment.js. 
 
-Recently queried cities are stored in local storage and randered as quick-links to populate the search field. 
+Recently queried cities are stored in local storage and rendered as quick-links to populate the search field. 
 
 Future work would be to implement better styling and use FontAwesome to add weather icons. Code is drafted, however not fully implemented. Additional future work would be to request browser location data for defaul location. This too is drafted, but not currently live.
 
