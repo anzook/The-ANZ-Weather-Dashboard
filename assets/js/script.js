@@ -229,7 +229,9 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                         var date = moment.unix(forecastDay[1].dt).utc().format("dddd, MMM Do");  //pull date from any of the objects
                         // description cases: https://openweathermap.org/weather-conditions
                         var weather = (forecastDay[3].weather[0].description);  //grab conditions mid-day
-                        console.log(icon(weather));
+                        // console.log(icon(weather));
+                        var iconSym = icon(weather);
+
                         function rounder(value, decimal) {
                             var multiplier = Math.pow(10, decimal || 0);
                             return Math.round(value * multiplier) / multiplier;
@@ -238,8 +240,11 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                         var address = "#box-" + (index + 1);
                         var dayCast = $("<div>");
                         let dateDisp = $("<div>").text(date);
-                        let weatherDisp = $("<div>").text(weather);
-                        // let weatherDisp = $("<div>").html(icon(weather));
+                        // let weatherDisp = $("<div>").text(weather);
+                        let weatherDisp = $("<div>").html(iconSym);
+                        // let weatherDisp = $("<div>").html("<i class='fas fa-cloud' aria-hidden='true'></i>");
+
+                        console.log(icon(weather));
 
                         let tempDisp = $("<div>").text("Temp: " + temp + "°F");
                         let humidDisp = $("<div>").text("Humidity: " + humid + "%");
@@ -260,34 +265,39 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
 
     function icon(desc) {
         let code = "";
+        console.log(desc)
         switch (desc) {
             case "clear sky":
-                code = "<i class=fas fa-sun aria-hidden='true'></i>";
+                code = "<i class='fas fa-sun' aria-hidden='true'></i>";
                 break;
             case "few clouds":
-                code = "<i class=fas fa-cloud-sun aria-hidden='true'></i>";
+                code = "<i class='fas fa-cloud-sun' aria-hidden='true'></i>";
                 break;
             case "scattered clouds":
-                code = "<i class=fas fa-cloud aria-hidden='true'></i>";
+                code = "<i class='fas fa-cloud' aria-hidden='true'></i>";
                 break;
             case "shower rain":
-                code = "<i class=fas fa-cloud-rain aria-hidden='true'></i>";
+                code = "<i class='fas fa-cloud-rain' aria-hidden='true'></i>";
                 break;
             case "rain":
-                code = "<i class=fas fa-cloud-showers-heavy aria-hidden='true'></i>";
+                code = "<i class='fas fa-cloud-showers-heavy' aria-hidden='true'></i>";
                 break;
             case "thunderstorm":
-                code = "<i class=fas fa-bolt aria-hidden='true'></i>";
+                code = "<i class='fas fa-bolt' aria-hidden='true'></i>";
                 break;
             case "snow":
-                code = "<i class=fas fa-snowflake aria-hidden='true'></i>";
+                code = "<i class='fas fa-snowflake' aria-hidden='true'></i>";
                 break;
             case "mist":
-                code = "<i class=fas fa-smog aria-hidden='true'></i>"
+                code = "<i class='fas fa-smog' aria-hidden='true'></i>"
                 break;
             case "broken clouds":
-                code = "<i class=fas fa-cloud-sun aria-hidden='true'></i>";
+                code = "<i class='fas fa-cloud-sun' aria-hidden='true'></i>";
+                break;
+            default: code = "<i class='fas fa-cloud' aria-hidden='true'></i>";
+        
         }
+        console.log(code)
         return code;
     }
 

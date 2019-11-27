@@ -20,13 +20,14 @@ so that I can plan a trip accordingly -->
 </head>
 
 <body>
-    <!-- Header -->
+    
+    <div class="container-fluid no-margin">
+        <!-- Header -->
     <nav class="navbar fixed-top text-center">
-        <h3 class="mx-auto">The ANZ Weather App</h3>
-    </nav>
+            <h3 class="mx-auto">The ANZ Weather App</h3>
+        </nav>
 
-    <div class="container-fluid">
-        <div class="row">
+        <div class="row main-content">
             <!-- Search area and history -->
             <div class="col-sm-3">
                 <label for="city-input">Search for a city: </label>
@@ -47,7 +48,9 @@ so that I can plan a trip accordingly -->
                     Search for a city to the left...
                 </div>
                 <div class="row">
-                    <div id="box-title" class="col-md-2"> 5-day forecast</div>
+                    <div id="box-title" class="col"> 5-day forecast</div>
+                </div>
+                <div class="row">
                     <div id="box-1" class="col-sm-2 day-box">1</div>
                     <div id="box-2" class="col-sm-2 day-box">2</div>
                     <div id="box-3" class="col-sm-2 day-box">3</div>
@@ -56,16 +59,18 @@ so that I can plan a trip accordingly -->
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer  -->
+        <!-- Footer  -->
     <footer class="footer">
-        <div class="container text-center">
+        <div class="text-center">
             <span>
                 The ANZ Weather App
             </span>
         </div>
     </footer>
+    </div>
+
+    
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
