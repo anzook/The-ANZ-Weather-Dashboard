@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
 
     //     var queryURLcast = queryURLforecast + $.param(paramsURLforecast);
     //     console.log(queryURLcast);
-    //     // let urlTest = "http://api.openweathermap.org/data/2.5/forecast?q=Baltimore&appid=c04cb915be53a048550a73855778b1d9";
+    //     // let urlTest = "https://api.openweathermap.org/data/2.5/forecast?q=Baltimore&appid=c04cb915be53a048550a73855778b1d9";
     //     // console.log(queryURLcast == urlTest);
 
     //     $.ajax({
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
     //     $("#current-weather").empty().text("Geolocation is not supported. Please search for a location on the left.");
     //   }
 
-        //use favorites to fill search area
+    //use favorites to fill search area
     $(document).on("click", ".city-btn", function (event) {
         event.preventDefault();
         $("#city-input").empty();
@@ -103,12 +103,12 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
         event.preventDefault();
         // Empty the search
         // clear();
-        // $.get("http://api.openweathermap.org/data/2.5/forecast?q=Baltimore&appid=c04cb915be53a048550a73855778b1d9").then((response)=>{
+        // $.get("https://api.openweathermap.org/data/2.5/forecast?q=Baltimore&appid=c04cb915be53a048550a73855778b1d9").then((response)=>{
         //     console.log(response)
         // });
 
         // queryURL is the url we'll use to query the first API
-        var queryURL = "http://api.openweathermap.org/data/2.5/weather?";
+        var queryURL = "https://api.openweathermap.org/data/2.5/weather?";
         var queryParams = {
             "APPID": appId
             , "units": "imperial"
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
             method: "GET"
         }).then(function (WeatherData) {
             //build URL for UV call with WeatherData object information
-            var queryURLuvi = "http://api.openweathermap.org/data/2.5/uvi?";
+            var queryURLuvi = "https://api.openweathermap.org/data/2.5/uvi?";
             let lat = WeatherData.coord.lat;
             let lon = WeatherData.coord.lon;
             var queryParamsUvi = { "appid": appId, "lat": lat, "lon": lon };
@@ -157,8 +157,8 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                 $("#current-weather").empty().append(weather);
 
                 //Build URL for daily forecast
-                // var queryURLforecast = "http://api.openweathermap.org/data/2.5/forecast/daily?";
-                var queryURLforecast = "http://api.openweathermap.org/data/2.5/forecast?";
+                // var queryURLforecast = "https://api.openweathermap.org/data/2.5/forecast/daily?";
+                var queryURLforecast = "https://api.openweathermap.org/data/2.5/forecast?";
 
                 // let lat = WeatherData.coord.lat;
                 // let lon = WeatherData.coord.lon;
@@ -238,8 +238,8 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
                         var address = "#box-" + (index + 1);
                         var dayCast = $("<div>");
                         let dateDisp = $("<div>").text(date);
-                        // let weatherDisp = $("<div>").text(weather);
-                        let weatherDisp = $("<div>").html(icon(weather));
+                        let weatherDisp = $("<div>").text(weather);
+                        // let weatherDisp = $("<div>").html(icon(weather));
 
                         let tempDisp = $("<div>").text("Temp: " + temp + "°F");
                         let humidDisp = $("<div>").text("Humidity: " + humid + "%");
@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function (event) {  //waits for pa
         return code;
     }
 
-        //In case a clear button were to be added
+    //In case a clear button were to be added
     // //  .on("click") function associated with the clear button
     // $("#clear-all").on("click", clear);
 

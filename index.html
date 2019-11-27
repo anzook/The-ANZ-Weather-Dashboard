@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!--Project User Story: As a traveler
+<!--Project User Story: As a traveler
 I want to see the weather outlook for multiple cities
 so that I can plan a trip accordingly -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,48 +11,42 @@ so that I can plan a trip accordingly -->
     <title>ANZ Weather App</title>
 
     <!-- Bootstrap -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <!-- Font awesome styles -->
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
     <!-- Handcrafted, samll-batch css -->
     <link rel="stylesheet" href="assets/styles/style.css" />
 </head>
-<body>
-<!-- Header -->
-        <nav class="navbar fixed-top text-center">
-                <h3 class="mx-auto">The ANZ Weather App</h3>
-              </nav>
-              
-<div class="container-fluid">
-    <div class="row">
-        <!-- Search area and history -->
-        <div class="col-sm-3">
-                     <label for="city-input">Search for a city: </label>
-                     <div class="input-group">
-                            <input type="text" id="city-input" class="form-control width100">
-                            <span class="input-group-btn">
-                                <button id="search-btn" class="btn btn-info"><i class="fas fa-search"></i></button>
-                            </span>
-                        </div>
-                        <div id="city-buttons">
-                            
-                        </div>
-        </div>
 
-        <!-- Weather display for current city -->
-        <div class="col-sm-9">
-            <div id="current-weather" class="jumbotron">
-                Search for a city to the left...
+<body>
+    <!-- Header -->
+    <nav class="navbar fixed-top text-center">
+        <h3 class="mx-auto">The ANZ Weather App</h3>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Search area and history -->
+            <div class="col-sm-3">
+                <label for="city-input">Search for a city: </label>
+                <div class="input-group">
+                    <input type="text" id="city-input" class="form-control width100">
+                    <span class="input-group-btn">
+                        <button id="search-btn" class="btn btn-info"><i class="fas fa-search"></i></button>
+                    </span>
+                </div>
+                <div id="city-buttons">
+
+                </div>
             </div>
-            <div class="row">
+
+            <!-- Weather display for current city -->
+            <div class="col-sm-9">
+                <div id="current-weather" class="jumbotron">
+                    Search for a city to the left...
+                </div>
+                <div class="row">
                     <div id="box-title" class="col-md-2"> 5-day forecast</div>
                     <div id="box-1" class="col-sm-2 day-box">1</div>
                     <div id="box-2" class="col-sm-2 day-box">2</div>
@@ -59,21 +54,22 @@ so that I can plan a trip accordingly -->
                     <div id="box-4" class="col-sm-2 day-box">4</div>
                     <div id="box-5" class="col-sm-2 day-box">5</div>
                 </div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Footer  -->
-<footer class="footer">
-    <div class="container text-center">
-        <span >
+    <!-- Footer  -->
+    <footer class="footer">
+        <div class="container text-center">
+            <span>
                 The ANZ Weather App
-        </span>
-            </div>
-            </footer>
+            </span>
+        </div>
+    </footer>
 
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-        <script src="assets/js/script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="assets/js/script.js"></script>
 </body>
+
 </html>
